@@ -6,7 +6,7 @@ import ProgressBarDebug from './ProgressBarDebug.vue'
 <template>
   <div>
     <ProgressBarDebug />
-    <ProgressBar />
+    <ProgressBar dashboard />
   </div>
 </template>
 

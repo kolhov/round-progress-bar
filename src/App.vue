@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { shallowRef } from "vue";
-import PieChart from '@/components/pie-chart/PieChart.vue';
+import PieChartPage from '@/components/pie-chart/PieChartPage.vue';
 import ProgressBarPage from '@/components/progress-bar/ProgressBarPage.vue';
 
-const page = shallowRef(PieChart);
+const page = shallowRef(PieChartPage);
 
 const selectPage = (x: EPages) => {
   if (x == EPages.PROGRESS_BAR){
     page.value = ProgressBarPage;
   }
   if (x == EPages.PIE_CHART){
-    page.value = PieChart;
+    page.value = PieChartPage;
   }
 }
 

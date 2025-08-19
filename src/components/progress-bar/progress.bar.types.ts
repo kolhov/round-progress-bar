@@ -1,0 +1,1 @@
+export type ProgressBarState = 'inProgress' | 'success' | 'warning' | 'error';
