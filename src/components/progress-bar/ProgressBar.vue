@@ -7,12 +7,13 @@ const ERROR_COLOR = '#fc0f1f'
 const INIT_COLOR = '#f7022f'
 const MIDDLE_COLOR = '#7045ff'
 const FINISH_COLOR = '#439423'
+const DASHBOARD_OFFSET = 100;
 
 const percentage = ref<number>(0);
 const color = ref<string>(INIT_COLOR);
 const state = ref<ProgressBarState>('inProgress');
 
-const CIRCUMFERENCE = 375; // calculated 2 * Math.PI * circle radius
+const CIRCUMFERENCE = 2 * Math.PI * 60;
 const strokeOffset = ref<number>(CIRCUMFERENCE);
 
 const props = defineProps<{
@@ -21,9 +22,10 @@ const props = defineProps<{
 
 function setProgress(newPercentage: number) {
   const clamped = Math.min(newPercentage, 100);
+
   let offset;
   if (props.dashboard) {
-    offset = CIRCUMFERENCE - CIRCUMFERENCE * (clamped / 100) + clamped;
+    offset = CIRCUMFERENCE - CIRCUMFERENCE * (clamped / 100) + clamped / 100 * DASHBOARD_OFFSET;
   } else {
     offset = CIRCUMFERENCE - CIRCUMFERENCE * (clamped / 100);
   }
@@ -82,15 +84,21 @@ onMounted(() => {
        viewBox="0 0 160 160"
   >
     <circle
-        v-if="!dashboard"
+        class="bar"
         fill="none" opacity=".2"
         stroke="#FF156D" stroke-width="10"
         stroke-linecap="round"
-        cx="80" cy="80" r="60"/>
+        cx="80" cy="80" r="60"
+        v-bind="dashboard ? {
+          'transform': 'rotate(140)',
+          'transform-origin': 'center',
+          'stroke-dasharray': 320,
+          'stroke-dashoffset': 45 }
+          : {}"
+    />
     <circle
-
         class="bar"
-        :transform="!dashboard ? 'rotate(270)' : 'rotate(140)'"
+        :transform="dashboard ? 'rotate(140)' : 'rotate(270)'"
         transform-origin="center"
         cx="80" cy="80" r="60"
         fill="none"
@@ -100,33 +108,6 @@ onMounted(() => {
         :stroke-dasharray="CIRCUMFERENCE"
         :stroke-dashoffset="strokeOffset"
     />
-    <circle
-        v-if="dashboard"
-        class="bar"
-        opacity=".2"
-        transform="rotate(140)"
-        transform-origin="center"
-        cx="80" cy="80" r="60"
-        fill="none"
-        stroke="#FF156D"
-        stroke-width="10"
-        stroke-linecap="round"
-        stroke-dasharray="320"
-        stroke-dashoffset="45"
-    />
-    <!--    <circle-->
-    <!--        v-if="dashboard"-->
-    <!--        class="bar"-->
-    <!--        transform="rotate(140)"-->
-    <!--        transform-origin="center"-->
-    <!--        cx="80" cy="80" r="60"-->
-    <!--        fill="none"-->
-    <!--        :stroke="color"-->
-    <!--        stroke-width="10"-->
-    <!--        stroke-linecap="round"-->
-    <!--        stroke-dasharray="375"-->
-    <!--        :stroke-dashoffset="strokeOffset"-->
-    <!--    />-->
     <text v-if="state == 'inProgress'"
           text-anchor="middle"
           x="50%"
@@ -161,6 +142,6 @@ onMounted(() => {
 
 <style scoped>
 .bar {
-  transition: stroke-dashoffset 1s ease, stroke 1s ease;
+  transition: stroke-dashoffset 1s ease, stroke 1s ease, stroke-dasharray 1s ease;
 }
 </style>
