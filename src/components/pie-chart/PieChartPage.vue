@@ -16,9 +16,15 @@ const chartData = ref({
 </script>
 
 <template>
-  <div class="flex flex-row">
-    <PieChartPanel v-model:chart-data="chartData" />
-    <PieChart :chart-data="chartData" />
+  <div>
+    <div class="mb-8">
+      <h1 class="text-xl pb-2">Круговая диаграмма</h1>
+      <hr />
+    </div>
+    <div class="flex flex-row">
+      <PieChartPanel v-model:chart-data="chartData" />
+      <PieChart :chart-data="chartData" />
+    </div>
   </div>
 </template>
 

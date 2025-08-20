@@ -22,6 +22,10 @@ const props = defineProps<{
   dashboard?: boolean
 }>();
 
+/**
+ *
+ * @param newPercentage number between 0 and 100
+ */
 function setProgress(newPercentage: number) {
   const clamped = Math.min(newPercentage, 100);
 
@@ -33,10 +37,12 @@ function setProgress(newPercentage: number) {
   }
   strokeOffset.value = offset;
 
+  if (clamped < 25 && barPercentage.value < 25) {
+    color.value = INIT_COLOR;
+  }
   if (clamped >= 25 && barPercentage.value <= 75) {
     color.value = MIDDLE_COLOR;
   }
-
   if (clamped > 75) {
     setTimeout(() => {
       color.value = FINISH_COLOR;
@@ -59,6 +65,10 @@ function setBarState(newState: ProgressBarState) {
       color.value = WARNING_COLOR;
       break;
     }
+    case "success": {
+      color.value = FINISH_COLOR;
+      break;
+    }
   }
 }
 
@@ -68,6 +78,11 @@ watch(() => props.percentage, (newPercentage) => {
 
 watch(() => props.state, (newState) => {
   setBarState(newState);
+})
+
+watch(() => props.dashboard, () => {
+  setProgress(barPercentage.value);
+  setBarState(props.state);
 })
 
 onMounted(() => {
@@ -87,6 +102,7 @@ onMounted(() => {
         stroke-linecap="round"
         cx="80" cy="80"
         :r="RADIUS"
+        :key="`dashboard-${dashboard}`"
         v-bind="dashboard ? {
           'transform': 'rotate(140)',
           'transform-origin': 'center',
@@ -141,6 +157,6 @@ onMounted(() => {
 
 <style scoped>
 .bar {
-  transition: stroke-dashoffset 1s ease, stroke 1s ease, stroke-dasharray 1s ease;
+  transition: stroke-dashoffset 1s ease, stroke 1s ease, stroke-dasharray 1s ease, transform 1s ease;
 }
 </style>

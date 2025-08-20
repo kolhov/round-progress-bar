@@ -48,7 +48,7 @@ const chartKey = computed(() =>
 .chart-container {
   position: relative;
   width: 100%;
-  padding-bottom: 100%; /* Создает квадратный контейнер */
+  padding-bottom: 100%;
   height: 0;
 }
 
