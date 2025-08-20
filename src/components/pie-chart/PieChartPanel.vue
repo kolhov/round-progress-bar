@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import type {ChartData} from "chart.js";
 import {Icon} from '@iconify/vue';
+import Dialog from "@/components/dialog/Dialog.vue";
+import PieChartEdit from "@/components/pie-chart/PieChartEdit.vue";
+import {ref} from "vue";
 
 const chartData = defineModel<ChartData<"pie", number[], unknown>>('chartData');
+const showDialog = ref<boolean>(false);
 
 function addSector(){
 
@@ -27,35 +31,40 @@ function deleteSector(index: number){
 </script>
 
 <template>
-  <div class="flex flex-col gap-y-4">
-    <div v-for="(data, index) in chartData?.datasets[0].data"
-         :key="`${index}-dataset`"
-         class="flex justify-between gap-4 bg-blue-100 p-2.5 rounded-md items-center"
-    >
-      <div class="flex gap-4">
+  <div>
+    <Dialog v-model:is-showed="showDialog">
+      <PieChartEdit v-model:chart-data="chartData" />
+    </Dialog>
+    <div class="flex flex-col gap-y-4">
+      <div v-for="(data, index) in chartData?.datasets[0].data"
+           :key="`${index}-dataset`"
+           class="flex justify-between gap-4 bg-blue-100 p-2.5 rounded-md items-center"
+      >
+        <div class="flex gap-4">
         <span v-if="chartData?.labels"
               class="min-w-30"
         >
           {{ chartData?.labels[index] }}
         </span>
-        <div class="divider"/>
-        <span class="min-w-12 text-center">{{ data }}</span>
-        <div class="divider"/>
-        <div v-if="chartData?.datasets[0].backgroundColor"
-              class="w-5 h-5 rounded-full place-self-center mr-8"
-              :style="{backgroundColor: (chartData?.datasets[0].backgroundColor as string[])[index]}"
-        />
+          <div class="divider"/>
+          <span class="min-w-12 text-center">{{ data }}</span>
+          <div class="divider"/>
+          <div v-if="chartData?.datasets[0].backgroundColor"
+               class="w-5 h-5 rounded-full place-self-center mr-8"
+               :style="{backgroundColor: (chartData?.datasets[0].backgroundColor as string[])[index]}"
+          />
+        </div>
+        <div>
+          <button class="editBut">
+            <Icon icon="iconamoon:edit-light"/>
+          </button>
+          <button class="editBut" @click.prevent="deleteSector(index)">
+            <Icon icon="material-symbols:delete-outline"/>
+          </button>
+        </div>
       </div>
-      <div>
-        <button class="editBut">
-          <Icon icon="iconamoon:edit-light"/>
-        </button>
-        <button class="editBut" @click.prevent="deleteSector(index)">
-          <Icon icon="material-symbols:delete-outline"/>
-        </button>
-      </div>
+      <button class="addButton" @click="showDialog = true">Добавить сектор</button>
     </div>
-    <button class="addButton ">Добавить сектор</button>
   </div>
 </template>
 

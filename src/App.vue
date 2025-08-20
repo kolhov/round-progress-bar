@@ -31,7 +31,6 @@ enum EPages {
 </template>
 
 <style scoped>
-
 @reference "tailwindcss";
 
 button {
