@@ -4,11 +4,11 @@ import PieChart from "@/components/pie-chart/PieChart.vue";
 import {ref} from "vue";
 
 const chartData = ref({
-  labels: ['Красный', 'Синий', 'Жёлтый'],
+  labels: ['Красный', 'Синий', 'Жёлтый', 'Жё'],
   datasets: [
     {
-      backgroundColor: ['#f87171', '#60a5fa', '#facc15'],
-      data: [40, 20, 3]
+      backgroundColor: ['#f87171', '#60a5fa', '#facc15', '#fa1115'],
+      data: [40, 20, 3, 3]
     }
   ]
 });
@@ -16,7 +16,7 @@ const chartData = ref({
 </script>
 
 <template>
-  <div>
+  <div class="flex flex-row">
     <PieChartPanel v-model:chart-data="chartData" />
     <PieChart :chart-data="chartData" />
   </div>

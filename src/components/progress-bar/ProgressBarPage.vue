@@ -2,7 +2,7 @@
 import ProgressBar from './ProgressBar.vue'
 import ProgressBarDebug from './ProgressBarDebug.vue'
 import {ref} from "vue";
-import type {ProgressBarState} from "@/components/progress-bar/progress.bar.types.ts";
+import type {ProgressBarState} from "@/components/progress-bar/progress.types.ts";
 
 const percentage = ref<number>(20);
 const barState = ref<ProgressBarState>('inProgress');

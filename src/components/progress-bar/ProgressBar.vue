@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type {ProgressBarState} from "@/components/progress-bar/progress.bar.types.ts";
+import type {ProgressBarState} from "@/components/progress-bar/progress.types.ts";
 import {onMounted, ref, watch} from "vue";
 
 const WARNING_COLOR = '#1cff37'
