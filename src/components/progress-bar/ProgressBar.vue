@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type {ProgressBarState} from "@/components/progress-bar/progress.bar.types.ts";
-import {computed, onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 
 const WARNING_COLOR = '#1cff37'
 const ERROR_COLOR = '#fc0f1f'
@@ -9,16 +9,18 @@ const MIDDLE_COLOR = '#7045ff'
 const FINISH_COLOR = '#439423'
 const DASHBOARD_OFFSET = 100;
 
-const percentage = ref<number>(0);
+const barPercentage = ref<number>(0);
 const color = ref<string>(INIT_COLOR);
-const state = ref<ProgressBarState>('inProgress');
 
-const CIRCUMFERENCE = 2 * Math.PI * 60;
+const RADIUS = 60;
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 const strokeOffset = ref<number>(CIRCUMFERENCE);
 
 const props = defineProps<{
+  percentage: number,
+  state: ProgressBarState,
   dashboard?: boolean
-}>()
+}>();
 
 function setProgress(newPercentage: number) {
   const clamped = Math.min(newPercentage, 100);
@@ -31,7 +33,7 @@ function setProgress(newPercentage: number) {
   }
   strokeOffset.value = offset;
 
-  if (clamped >= 25 && percentage.value <= 75) {
+  if (clamped >= 25 && barPercentage.value <= 75) {
     color.value = MIDDLE_COLOR;
   }
 
@@ -40,42 +42,37 @@ function setProgress(newPercentage: number) {
       color.value = FINISH_COLOR;
     }, 500);
   }
-
-  if (clamped == 100) {
-    setTimeout(() => {
-      state.value = 'success';
-    }, 1000);
-  }
-
-  percentage.value = clamped;
+  barPercentage.value = clamped;
 }
 
 function setBarState(newState: ProgressBarState) {
-  state.value = newState;
-
-  if (newState == 'error') {
-    color.value = ERROR_COLOR;
-  } else if (newState == 'warning') {
-    color.value = WARNING_COLOR;
+  switch (newState){
+    case "error": {
+      color.value = ERROR_COLOR;
+      break;
+    }
+    case "inProgress": {
+      setProgress(barPercentage.value);
+      break;
+    }
+    case "warning": {
+      color.value = WARNING_COLOR;
+      break;
+    }
   }
 }
 
+watch(() => props.percentage, (newPercentage) => {
+  setProgress(newPercentage);
+})
+
+watch(() => props.state, (newState) => {
+  setBarState(newState);
+})
+
 onMounted(() => {
-  setTimeout(() => {
-    setProgress(25);
-    // setTimeout(() => {
-    //   setBarState('error');
-    // }, 700)
-    // setTimeout(() => {
-    //   setBarState('warning');
-    // }, 1400)
-  }, 400)
-  setTimeout(() => {
-    setProgress(50);
-  }, 2000)
-  setTimeout(() => {
-    setProgress(100);
-  }, 3000)
+  setProgress(props.percentage);
+  setBarState(props.state);
 })
 </script>
 
@@ -88,7 +85,8 @@ onMounted(() => {
         fill="none" opacity=".2"
         stroke="#FF156D" stroke-width="10"
         stroke-linecap="round"
-        cx="80" cy="80" r="60"
+        cx="80" cy="80"
+        :r="RADIUS"
         v-bind="dashboard ? {
           'transform': 'rotate(140)',
           'transform-origin': 'center',
@@ -100,7 +98,8 @@ onMounted(() => {
         class="bar"
         :transform="dashboard ? 'rotate(140)' : 'rotate(270)'"
         transform-origin="center"
-        cx="80" cy="80" r="60"
+        cx="80" cy="80"
+        :r="RADIUS"
         fill="none"
         :stroke="color"
         stroke-width="10"
@@ -116,7 +115,7 @@ onMounted(() => {
           font-family="Roboto, Arial, sans-serif"
           fill="#6E6E6E"
     >
-      {{ percentage }}%
+      {{ barPercentage }}%
     </text>
     <path v-else-if="state == 'success'"
           fill="none"
