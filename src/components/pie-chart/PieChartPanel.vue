@@ -7,12 +7,15 @@ import {ref} from "vue";
 
 const chartData = defineModel<ChartData<"pie", number[], unknown>>('chartData');
 const showDialog = ref<boolean>(false);
+const selectedIndex = ref<number | undefined>(undefined);
 
 function addSector(){
-
+  selectedIndex.value = undefined;
+  showDialog.value = true;
 }
-function editSector(){
-
+function editSector(index: number){
+  selectedIndex.value = index;
+  showDialog.value = true;
 }
 
 function deleteSector(index: number){
@@ -33,7 +36,7 @@ function deleteSector(index: number){
 <template>
   <div>
     <Dialog v-model:is-showed="showDialog">
-      <PieChartEdit v-model:chart-data="chartData" />
+      <PieChartEdit v-model="chartData" :index="selectedIndex" />
     </Dialog>
     <div class="flex flex-col gap-y-4">
       <div v-for="(data, index) in chartData?.datasets[0].data"
@@ -55,7 +58,7 @@ function deleteSector(index: number){
           />
         </div>
         <div>
-          <button class="editBut">
+          <button class="editBut" @click="editSector(index)" >
             <Icon icon="iconamoon:edit-light"/>
           </button>
           <button class="editBut" @click.prevent="deleteSector(index)">
@@ -63,7 +66,7 @@ function deleteSector(index: number){
           </button>
         </div>
       </div>
-      <button class="addButton" @click="showDialog = true">Добавить сектор</button>
+      <button class="addButton" @click="addSector">Добавить сектор</button>
     </div>
   </div>
 </template>

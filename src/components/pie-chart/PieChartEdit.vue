@@ -1,16 +1,36 @@
 <script setup lang="ts">
 import type {ChartData} from "chart.js";
-import {ChromePicker, SketchPicker} from 'vue-color';
-import {ref} from "vue";
+import {ChromePicker} from 'vue-color';
+import {computed, ref, watch} from "vue";
 
-const chartData = defineModel<ChartData<"pie", number[], unknown>>('chartData');
+const chartData = defineModel<ChartData<"pie", number[], unknown>>();
 const prop = defineProps<{
-  index: number
+  index: number | undefined;
 }>();
 
 const newLabel = ref<string>('');
 const newValue = ref<number>();
-const color = ref<string>('#68CCCA');
+const newColor = ref<string>('#68CCCA');
+
+function save(){
+  if (prop.index !== undefined){
+    chartData.value.labels[prop.index] = newLabel.value;
+    chartData.value.datasets[0].data[prop.index] = newValue.value;
+    chartData.value.datasets[0].backgroundColor[prop.index] = newColor.value;
+  } else {
+
+  }
+
+
+}
+
+watch(() => prop.index, (newVal) => {
+  if (newVal !== undefined) {
+    newLabel.value = chartData.value.labels[newVal];
+    newValue.value = chartData.value.datasets[0].data[newVal];
+    newColor.value = chartData.value.datasets[0].backgroundColor[newVal];
+  }
+}, { immediate : true })
 </script>
 
 <template>
@@ -18,7 +38,7 @@ const color = ref<string>('#68CCCA');
   <h2 class="font-semibold">Добавление сектора</h2>
   <div class="relative">
     <input
-        v-model="index ? chartData!.labels[index] : newLabel"
+        v-model="newLabel"
         type="text"
         id="input"
         placeholder=" "
@@ -33,7 +53,7 @@ const color = ref<string>('#68CCCA');
   </div>
   <div class="relative">
     <input
-        v-model="value"
+        v-model="newValue"
         type="text"
         id="input"
         placeholder=" "
@@ -46,9 +66,12 @@ const color = ref<string>('#68CCCA');
       Значение
     </label>
     <div class="flex justify-center mt-4">
-      <SketchPicker v-model="color" />
+      <ChromePicker v-model="newColor" disable-alpha />
     </div>
   </div>
+  <button class="addButton" @click="save">
+    {{index !== undefined ? 'Обновить сектор' : 'Добавить сектор'}}
+  </button>
 </div>
 </template>
 
@@ -67,5 +90,8 @@ const color = ref<string>('#68CCCA');
   peer-focus:top-2 peer-focus:text-xs peer-focus:text-blue-500;
 }
 
+.addButton {
+  @apply p-2.5 rounded-md bg-blue-600 w-full text-white hover:bg-blue-500 hover:cursor-pointer;
+}
 
 </style>

@@ -8,7 +8,7 @@ import {
   ArcElement
 } from 'chart.js';
 import type {ChartData} from 'chart.js';
-import {computed} from "vue";
+import {ref, watch} from "vue";
 
 ChartJS.register(Title, Tooltip, Legend, ArcElement);
 
@@ -20,9 +20,17 @@ const chartOptions = {
   responsive: true,
 };
 
-const chartKey = computed(() =>
-    JSON.stringify(props.chartData.datasets.map(d => d.data)).slice(0, 50)
-);
+const chartRef = ref();
+
+const updateChart = () => {
+  if (chartRef.value?.chart) {
+    chartRef.value.chart.update();
+  }
+};
+
+watch(() => props.chartData, (newData) => {
+  updateChart();
+}, { deep: true });
 </script>
 
 <template>
@@ -30,7 +38,7 @@ const chartKey = computed(() =>
     <div class="chart-container">
       <Pie
           id="pie-chart"
-          :key="chartKey"
+          ref="chartRef"
           :options="chartOptions"
           :data="chartData"
       />
