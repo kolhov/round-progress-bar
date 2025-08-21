@@ -1,33 +1,24 @@
-# vue-project
+# ProgressBar Component
 
-This template should help get you started developing with Vue 3 in Vite.
+`ProgressBar` — настраиваемый компонент прогресс-бара, построенный на **SVG** без использования сторонних библиотек. Поддерживает разные состояния и может отображаться в режиме дашборда.
 
-## Recommended IDE Setup
+## Demo
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+Демо сайт: [Progress Dashboard Demo](https://progress-dashboard-demo.staticrun.app)
 
-## Type Support for `.vue` Imports in TS
+## Props
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+| Prop         | Type                                                | Default        | Description |
+|------------- |-----------------------------------------------------|----------------|-------------|
+| `percentage` | `number`                                            | `0`            | Процент заполнения прогресс-бара (0–100). |
+| `state`      | `'inProgress' \| 'success' \| 'warning' \| 'error'` | `'inProgress'` | Состояние прогресс-бара, влияет на цвет и стиль. |
+| `dashboard`  | `boolean`                                           | `false`        | При включении изменяет стиль на вид дашборда. |
 
-## Customize configuration
+## States
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+- `inProgress` — бар в процессе заполнения.  
+- `success` — успешно завершен.  
+- `warning` — требует внимания.  
+- `error` — произошла ошибка.  
 
-## Project Setup
 
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
