@@ -21,22 +21,21 @@ function editSector(index: number){
 function deleteSector(index: number){
   if (!chartData.value) return;
 
-  if (chartData.value?.labels){
-    chartData.value.labels = chartData.value?.labels.filter((_, i) => i !== index);
-  }
-
-  chartData.value.datasets[0].backgroundColor = (
-      (chartData.value.datasets[0].backgroundColor as string[]).filter((_, i) => i !== index)
-  )
-
-  chartData.value.datasets[0].data = chartData.value.datasets[0].data.filter((_, i) => i !== index)
+  chartData.value = {
+    labels: chartData.value?.labels.filter((_, i) => i !== index),
+    datasets: [{
+      ...chartData.value.datasets[0],
+      data: chartData.value.datasets[0].data.filter((_, i) => i !== index),
+      backgroundColor: (chartData.value.datasets[0].backgroundColor as string[]).filter((_, i) => i !== index)
+    }]
+  };
 }
 </script>
 
 <template>
   <div>
     <Dialog v-model:is-showed="showDialog">
-      <PieChartEdit v-model="chartData" :index="selectedIndex" />
+      <PieChartEdit v-model="chartData" :index="selectedIndex" @close="showDialog = false" />
     </Dialog>
     <div class="flex flex-col gap-y-4">
       <div v-for="(data, index) in chartData?.datasets[0].data"

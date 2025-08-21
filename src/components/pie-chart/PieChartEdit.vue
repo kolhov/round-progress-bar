@@ -7,6 +7,7 @@ const chartData = defineModel<ChartData<"pie", number[], unknown>>();
 const prop = defineProps<{
   index: number | undefined;
 }>();
+const emit = defineEmits(['close']);
 
 const newLabel = ref<string>('');
 const newValue = ref<number>();
@@ -18,10 +19,16 @@ function save(){
     chartData.value.datasets[0].data[prop.index] = newValue.value;
     chartData.value.datasets[0].backgroundColor[prop.index] = newColor.value;
   } else {
-
+    chartData.value = {
+      labels: [...chartData.value.labels, newLabel.value],
+      datasets: [{
+        ...chartData.value.datasets[0],
+        data: [...chartData.value.datasets[0].data, newValue.value],
+        backgroundColor: [...chartData.value.datasets[0].backgroundColor, newColor.value]
+      }]
+    };
   }
-
-
+  emit('close');
 }
 
 watch(() => prop.index, (newVal) => {
