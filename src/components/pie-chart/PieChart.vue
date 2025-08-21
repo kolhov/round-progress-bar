@@ -18,6 +18,11 @@ const props = defineProps<{
 
 const chartOptions = {
   responsive: true,
+  plugins: {
+    legend: {
+      position: 'bottom' as const
+    }
+  }
 };
 
 const chartRef = ref();

@@ -3,7 +3,7 @@ import {shallowRef} from "vue";
 import PieChartPage from '@/components/pie-chart/PieChartPage.vue';
 import ProgressBarPage from '@/components/progress-bar/ProgressBarPage.vue';
 
-const page = shallowRef(PieChartPage);
+const page = shallowRef(ProgressBarPage);
 
 const selectPage = (x: EPages) => {
   if (x == EPages.PROGRESS_BAR) {

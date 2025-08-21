@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type {ChartData} from "chart.js";
 import {ChromePicker} from 'vue-color';
-import {computed, ref, watch} from "vue";
+import {ref, watch} from "vue";
 
 const chartData = defineModel<ChartData<"pie", number[], unknown>>();
 const prop = defineProps<{

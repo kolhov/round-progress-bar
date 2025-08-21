@@ -19,8 +19,7 @@
     "tailwindcss": "^4.1.12",
     "vue": "^3.5.18",
     "vue-chartjs": "^5.3.2",
-    "vue-color": "^3.3.1",
-    "vue-colour-picker": "^0.0.5"
+    "vue-color": "^3.3.1"
   },
   "devDependencies": {
     "@iconify/vue": "^5.0.0",
