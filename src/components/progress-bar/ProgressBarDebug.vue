@@ -69,10 +69,10 @@ function zeroToWarningWithError(){
 <template>
   <div class="flex flex-col">
     <div class="grid grid-cols-2 grid-rows-2 gap-2 max-h-25 justify-center items-center">
-      <button class="stateButton" @click="barState = 'warning'">Warning</button>
-      <button class="stateButton" @click="barState = 'error'">Error</button>
-      <button class="stateButton" @click="barState = 'success'">Success</button>
-      <button class="stateButton" @click="barState = 'inProgress'">In progress</button>
+      <button :disabled="disable" class="stateButton" @click="barState = 'warning'">Warning</button>
+      <button :disabled="disable" class="stateButton" @click="barState = 'error'">Error</button>
+      <button :disabled="disable" class="stateButton" @click="barState = 'success'">Success</button>
+      <button :disabled="disable" class="stateButton" @click="barState = 'inProgress'">In progress</button>
     </div>
     <div class="mt-4 w-full flex">
       <label class="p-2 stateButton w-full">
@@ -82,7 +82,7 @@ function zeroToWarningWithError(){
     </div>
     <div class="mt-4 w-full flex">
       <label class="p-2 stateButton w-full">
-        <input type="range" v-model="percentage" :disabled="disable"/>
+        <input type="range" v-model.number="percentage" :disabled="disable"/>
         Percentage
       </label>
     </div>
