@@ -4,7 +4,7 @@
 
 ## Demo
 
-Демо сайт: [Progress Dashboard Demo](https://progress-dashboard-demo.staticrun.app)
+Демо сайт: [Progress Dashboard Demo](https://dashboard-widget.kolhovv.workers.dev)
 
 ## Props
 
